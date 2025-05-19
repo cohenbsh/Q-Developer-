@@ -1,0 +1,253 @@
+diff -wruN '--exclude=.git' a/openjdk.jdk/Contents/Home/conf/management/management.properties b/openjdk.jdk/Contents/Home/conf/management/management.properties
+--- a/openjdk.jdk/Contents/Home/conf/management/management.properties	2024-10-10 17:24:34.000000000 +0000
++++ b/openjdk.jdk/Contents/Home/conf/management/management.properties	2024-12-02 10:23:42.000000000 +0000
+@@ -104,10 +104,10 @@
+ #      The current implementation of the out-of-the-box management agent will
+ #      look up and use the properties specified below to configure the SSL
+ #      keystore and truststore, if present:
+-#          javax.net.ssl.keyStore=<keystore-location>
+-#          javax.net.ssl.keyStorePassword=<keystore-password>
+-#          javax.net.ssl.trustStore=<truststore-location>
+-#          javax.net.ssl.trustStorePassword=<truststore-password>
++#          jakarta.net.ssl.keyStore=<keystore-location>
++#          jakarta.net.ssl.keyStorePassword=<keystore-password>
++#          jakarta.net.ssl.trustStore=<truststore-location>
++#          jakarta.net.ssl.trustStorePassword=<truststore-password>
+ #      Any other properties in the file will be ignored. This will allow us
+ #      to extend the property set in the future if required by the default
+ #      SSL implementation.
+@@ -195,7 +195,7 @@
+ #      by JAAS. In addition, the login module(s) specified in the configuration
+ #      should use the name and/or password callbacks to acquire the user's
+ #      credentials. See the NameCallback and PasswordCallback classes in the
+-#      javax.security.auth.callback package for more details.
++#      jakarta.security.auth.callback package for more details.
+ #
+ #      If the property "com.sun.management.jmxremote.authenticate" is set to
+ #      false, then this property and the password & access files are ignored.
+diff -wruN '--exclude=.git' a/openjdk.jdk/Contents/Home/conf/sound.properties b/openjdk.jdk/Contents/Home/conf/sound.properties
+--- a/openjdk.jdk/Contents/Home/conf/sound.properties	2024-10-10 17:24:34.000000000 +0000
++++ b/openjdk.jdk/Contents/Home/conf/sound.properties	2024-12-02 10:23:42.000000000 +0000
+@@ -3,22 +3,22 @@
+ ############################################################
+ #
+ # This properties file is used to specify default service
+-# providers for javax.sound.midi.MidiSystem and
+-# javax.sound.sampled.AudioSystem.
++# providers for jakarta.sound.midi.MidiSystem and
++# jakarta.sound.sampled.AudioSystem.
+ #
+ # The following keys are recognized by MidiSystem methods:
+ #
+-# javax.sound.midi.Receiver
+-# javax.sound.midi.Sequencer
+-# javax.sound.midi.Synthesizer
+-# javax.sound.midi.Transmitter
++# jakarta.sound.midi.Receiver
++# jakarta.sound.midi.Sequencer
++# jakarta.sound.midi.Synthesizer
++# jakarta.sound.midi.Transmitter
+ #
+ # The following keys are recognized by AudioSystem methods:
+ #
+-# javax.sound.sampled.Clip
+-# javax.sound.sampled.Port
+-# javax.sound.sampled.SourceDataLine
+-# javax.sound.sampled.TargetDataLine
++# jakarta.sound.sampled.Clip
++# jakarta.sound.sampled.Port
++# jakarta.sound.sampled.SourceDataLine
++# jakarta.sound.sampled.TargetDataLine
+ #
+ # The values specify the full class name of the service
+ # provider, or the device name.
+@@ -27,13 +27,13 @@
+ #
+ # Example 1:
+ # Use MyDeviceProvider as default for SourceDataLines:
+-# javax.sound.sampled.SourceDataLine=com.xyz.MyDeviceProvider
++# jakarta.sound.sampled.SourceDataLine=com.xyz.MyDeviceProvider
+ #
+ # Example 2:
+ # Specify the default Synthesizer by its name "InternalSynth".
+-# javax.sound.midi.Synthesizer=#InternalSynth
++# jakarta.sound.midi.Synthesizer=#InternalSynth
+ #
+ # Example 3:
+ # Specify the default Receiver by provider and name:
+-# javax.sound.midi.Receiver=com.sun.media.sound.MidiProvider#SunMIDI1
++# jakarta.sound.midi.Receiver=com.sun.media.sound.MidiProvider#SunMIDI1
+ #
+diff -wruN '--exclude=.git' a/pom.xml b/pom.xml
+--- a/pom.xml	2024-07-17 12:34:42.000000000 +0000
++++ b/pom.xml	2024-12-02 11:31:37.205162257 +0000
+@@ -1,30 +1,43 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <parent>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-parent</artifactId>
+-        <version>1.4.7.RELEASE</version>
+-        <relativePath/> <!-- lookup parent from repository -->
++        <version>3.3.6</version>
++        <relativePath/>
++        <!-- lookup parent from repository -->
+     </parent>
+     <groupId>com.example</groupId>
+     <artifactId>crud-app</artifactId>
+     <version>0.0.1-SNAPSHOT</version>
+     <name>crud-app</name>
+     <description>CRUD application with MySQL</description>
+-
+     <properties>
+-        <java.version>1.8</java.version>
++        <java.version>17</java.version>
++        <maven.compiler.source>17</maven.compiler.source>
++        <maven.compiler.target>17</maven.compiler.target>
++        <maven.compiler.release>17</maven.compiler.release>
+     </properties>
+-
++    <dependencyManagement>
+     <dependencies>
+         <dependency>
++                <groupId>jakarta.persistence</groupId>
++                <artifactId>jakarta.persistence-api</artifactId>
++                <version>3.2.0</version>
++            </dependency>
++        </dependencies>
++    </dependencyManagement>
++    <dependencies>
++        <dependency>
++            <groupId>jakarta.persistence</groupId>
++            <artifactId>jakarta.persistence-api</artifactId>
++        </dependency>
++        <dependency>
+             <groupId>org.aspectj</groupId>
+             <artifactId>aspectjweaver</artifactId>
+-            <version>1.8.14</version> <!-- Use a stable version -->
++            <!-- Use a stable version -->
+         </dependency>
+-
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-data-jpa</artifactId>
+@@ -34,24 +47,25 @@
+             <artifactId>spring-boot-starter-web</artifactId>
+         </dependency>
+         <dependency>
+-            <groupId>mysql</groupId>
+-            <artifactId>mysql-connector-java</artifactId>
+-            <version>5.0.5</version>
++            <groupId>org.junit.jupiter</groupId>
++            <artifactId>junit-jupiter</artifactId>
++            <scope>test</scope>
++        </dependency>
++        <dependency>
++            <groupId>com.mysql</groupId>
++            <artifactId>mysql-connector-j</artifactId>
+         </dependency>
+ 		<dependency>
+ 			<groupId>org.mockito</groupId>
+ 			<artifactId>mockito-core</artifactId>
+-			<version>2.28.2</version>
+ 			<scope>test</scope>
+ 		</dependency>
+ 		<dependency>
+-			<groupId>junit</groupId>
+-			<artifactId>junit</artifactId>
+-			<version>4.11</version>
++            <groupId>org.mockito</groupId>
++            <artifactId>mockito-junit-jupiter</artifactId>
+ 			<scope>test</scope>
+ 		</dependency>
+     </dependencies>
+-
+     <build>
+         <plugins>
+             <plugin>
+@@ -60,5 +74,4 @@
+             </plugin>
+         </plugins>
+     </build>
+-
+ </project>
+diff -wruN '--exclude=.git' a/src/main/java/com/example/model/Customer.java b/src/main/java/com/example/model/Customer.java
+--- a/src/main/java/com/example/model/Customer.java	2024-07-17 12:34:42.000000000 +0000
++++ b/src/main/java/com/example/model/Customer.java	2024-12-02 10:23:42.000000000 +0000
+@@ -1,6 +1,6 @@
+ package com.example.model;
+ 
+-import javax.persistence.*;
++import jakarta.persistence.*;
+ import java.util.Set;
+ 
+ @Entity
+diff -wruN '--exclude=.git' a/src/main/java/com/example/model/Order.java b/src/main/java/com/example/model/Order.java
+--- a/src/main/java/com/example/model/Order.java	2024-07-17 12:34:42.000000000 +0000
++++ b/src/main/java/com/example/model/Order.java	2024-12-02 10:23:42.000000000 +0000
+@@ -1,6 +1,6 @@
+ package com.example.model;
+ 
+-import javax.persistence.*;
++import jakarta.persistence.*;
+ 
+ @Entity
+ @Table(name = "orders")
+diff -wruN '--exclude=.git' a/src/main/java/com/example/model/Product.java b/src/main/java/com/example/model/Product.java
+--- a/src/main/java/com/example/model/Product.java	2024-07-17 12:34:42.000000000 +0000
++++ b/src/main/java/com/example/model/Product.java	2024-12-02 10:23:42.000000000 +0000
+@@ -1,6 +1,6 @@
+ package com.example.model;
+ 
+-import javax.persistence.*;
++import jakarta.persistence.*;
+ 
+ @Entity
+ @Table(name = "products")
+diff -wruN '--exclude=.git' a/src/main/java/com/example/service/ProductService.java b/src/main/java/com/example/service/ProductService.java
+--- a/src/main/java/com/example/service/ProductService.java	2024-07-17 12:34:42.000000000 +0000
++++ b/src/main/java/com/example/service/ProductService.java	2024-12-02 10:23:42.000000000 +0000
+@@ -17,7 +17,7 @@
+     }
+ 
+     public Product getProductById(final long id) {
+-        return productRepository.getOne(id);
++        return productRepository.getReferenceById(id);
+     }
+ 
+     public List<Product> getAllProducts() {
+diff -wruN '--exclude=.git' a/src/test/java/com/example/project/CrudControllerTest.java b/src/test/java/com/example/project/CrudControllerTest.java
+--- a/src/test/java/com/example/project/CrudControllerTest.java	2024-07-17 12:34:42.000000000 +0000
++++ b/src/test/java/com/example/project/CrudControllerTest.java	2024-12-02 10:23:42.000000000 +0000
+@@ -7,8 +7,8 @@
+ import com.example.service.OrderService;
+ import com.example.service.ProductService;
+ import com.example.controller.CrudController;
+-import org.junit.Before;
+-import org.junit.Test;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
+ import org.mockito.InjectMocks;
+ import org.mockito.Mock;
+ import org.mockito.MockitoAnnotations;
+@@ -18,7 +18,7 @@
+ import java.util.Arrays;
+ import java.util.List;
+ 
+-import static org.junit.Assert.assertEquals;
++import static org.junit.jupiter.api.Assertions.assertEquals;
+ import static org.mockito.ArgumentMatchers.any;
+ import static org.mockito.Mockito.when;
+ 
+@@ -40,7 +40,7 @@
+     private Product product;
+     private Order order;
+ 
+-    @Before
++    @BeforeEach
+     public void setUp() {
+         MockitoAnnotations.initMocks(this);
+         customer = new Customer();
